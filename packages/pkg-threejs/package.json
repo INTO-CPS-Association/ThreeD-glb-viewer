@@ -1,0 +1,40 @@
+{
+  "name": "pkg-threejs",
+  "type": "module",
+  "version": "0.1.0",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "description": "",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "scripts": {
+    "build": "bun run build.ts",
+    "prepublishOnly": "bun run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olivergeneser/threejs-render-custom.git"
+  },
+  "bugs": "https://github.com/olivergeneser/threejs-render-custom/issues",
+  "author": "Oliver Geneser <hello@geneser.xyz>",
+  "devDependencies": {
+    "@types/bun": "^1.1.10",
+    "@types/mime-types": "^2.1.4",
+    "@types/three": "^0.173.0",
+    "bun-plugin-dts": "^0.3.0",
+    "mime-types": "^2.1.35"
+  },
+  "dependencies": {
+    "gsap": "^3.12.7",
+    "lil-gui": "^0.20.0",
+    "three": "^0.173.0"
+  }
+}
