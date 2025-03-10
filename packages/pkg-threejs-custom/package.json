@@ -1,5 +1,5 @@
 {
-  "name": "pkg-threejs",
+  "name": "@into-cps-association/threed-glb-viewer",
   "type": "module",
   "version": "0.1.0",
   "main": "./dist/index.cjs",
@@ -21,9 +21,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/olivergeneser/threejs-render-custom.git"
+    "url": "git+https://github.com/INTO-CPS-Association/ThreeD-glb-viewer.git"
   },
-  "bugs": "https://github.com/olivergeneser/threejs-render-custom/issues",
+  "bugs": "https://github.com/INTO-CPS-Association/ThreeD-glb-viewer/issues",
   "author": "Oliver Geneser <hello@geneser.xyz>",
   "devDependencies": {
     "@types/bun": "^1.1.10",
