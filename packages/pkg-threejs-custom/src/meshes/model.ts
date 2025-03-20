@@ -6,13 +6,18 @@ let model: any | null = null;
 export default model;
 
 export async function loadModel(src: string) {
-  const gltf = await new GLTFLoader().loadAsync(src, function (gltf) {
-    return gltf;
-  });
-  model = gltf.scene;
-  model.scale.set(0.01, 0.01, 0.01);
-  model.position.setY(0);
-  return model;
+  try {
+    const gltf = await new GLTFLoader().loadAsync(src, function (gltf) {
+      //console.log(gltf);
+      return gltf;
+    });
+    model = gltf.scene;
+    model.scale.set(0.01, 0.01, 0.01);
+    model.position.setY(0);
+    return model;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 const modelProperties = {

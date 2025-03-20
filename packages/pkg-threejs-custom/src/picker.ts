@@ -26,11 +26,11 @@ export function pick(
   var intersects = raycaster.intersectObjects(sceneProp.children, true);
 
   if (intersects.length > 0) {
-    console.log("Intersection:", intersects[0]);
+    //console.log("Intersection:", intersects[0]);
 
     pickedObject = intersects[0].object;
 
-    console.log(typeof pickedObject);
+    //console.log(typeof pickedObject);
 
     pickedObjectSavedColor = pickedObject.material.emissive.getHex();
     pickedObject.material.emissive.setHex(
