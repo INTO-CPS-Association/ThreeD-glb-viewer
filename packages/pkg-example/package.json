@@ -9,11 +9,11 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "typescript": "^5.8.2",
+    "vite": "^5.4.15"
   },
   "dependencies": {
-    "gsap": "^3.12.4",
+    "gsap": "^3.12.7",
     "@into-cps-association/threed-glb-viewer": "workspace:*"
   }
 }

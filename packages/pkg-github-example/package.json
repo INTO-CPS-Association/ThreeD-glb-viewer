@@ -14,6 +14,6 @@
   },
   "dependencies": {
     "gsap": "^3.12.4",
-    "@into-cps-association/threed-glb-viewer": "0.1.1"
+    "@into-cps-association/threed-glb-viewer": "0.1.0"
   }
 }

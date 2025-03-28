@@ -1,5 +1,3 @@
-jsx = "react-jsx"
-
 [test]
 preload = ["./happydom.ts"]
 
