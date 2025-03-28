@@ -13,7 +13,7 @@ jobs:
       packages: write
     defaults:
       run:
-        working-directory: "packages/pkg-threejs-custom"
+        working-directory: "packages/threed-glb-viewer"
     steps:
       - uses: actions/checkout@v4
 

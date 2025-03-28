@@ -7,9 +7,8 @@ export default model;
 
 export async function loadModel(src: string) {
   try {
-    const gltf = await new GLTFLoader().loadAsync(src, function (gltf) {
-      //console.log(gltf);
-      return gltf;
+    const gltf = await new GLTFLoader().loadAsync(src, function (progress) {
+      console.log(progress);
     });
     model = gltf.scene;
     model.scale.set(0.01, 0.01, 0.01);

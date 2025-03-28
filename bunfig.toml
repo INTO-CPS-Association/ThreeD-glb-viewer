@@ -1,2 +1,15 @@
+jsx = "react-jsx"
+
 [test]
 preload = ["./happydom.ts"]
+
+[serve.static]
+env = "BUN_PUBLIC_*"
+
+[install.scopes]
+# registry as string
+"@into-cps-association" = {
+    token = "",
+    url = "https://npm.pkg.github.com/"
+}
+
