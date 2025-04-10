@@ -9,8 +9,6 @@ Bun.serve({
     const pathname = url.pathname;
     const filePath = path.join(BASE_PATH, pathname);
 
-    console.log(`Attempting to serve: ${filePath}`);
-
     try {
       const file = Bun.file(filePath);
 

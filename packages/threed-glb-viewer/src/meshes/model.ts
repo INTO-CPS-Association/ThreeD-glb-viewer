@@ -1,15 +1,16 @@
 import { modelFolder } from "../lilgui";
 import gsap from "gsap";
+import { Group, Object3DEventMap } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 let model: any | null = null;
 export default model;
 
-export async function loadModel(src: string) {
+export async function loadModel(
+  src: string,
+): Promise<Group<Object3DEventMap> | undefined> {
   try {
-    const gltf = await new GLTFLoader().loadAsync(src, function (progress) {
-      console.log(progress);
-    });
+    const gltf = await new GLTFLoader().loadAsync(src);
     model = gltf.scene;
     model.scale.set(0.01, 0.01, 0.01);
     model.position.setY(0);
@@ -19,15 +20,12 @@ export async function loadModel(src: string) {
   }
 }
 
-const modelProperties = {
+export const modelProperties = {
   flipLeft: () => {},
   flipRight: () => {},
   flipUp: () => {},
   flipDown: () => {},
 };
-
-//Find ud af hvordan man laver et wireframe material
-//modelFolder.add(wireframeMaterial, "wireframe");
 
 modelProperties.flipLeft = () => {
   gsap.to(model.rotation, { y: model.rotation.y + -Math.PI / 2 });

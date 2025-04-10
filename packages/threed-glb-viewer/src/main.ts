@@ -10,7 +10,7 @@ import { loadModel } from "./meshes/model";
 export default async function renderThreejs(modelSrc: string) {
   // Meshes
   const model = await loadModel(modelSrc);
-  scene.add(model);
+  if (model) scene.add(model);
   scene.add(floor);
 
   // Lights
