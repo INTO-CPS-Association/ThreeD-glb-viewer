@@ -2,6 +2,7 @@ import * as THREE from "three";
 import scene from "./scene";
 import camera from "./camera";
 import timer from "./timer";
+import { selectedPartFolder } from "./lilgui";
 
 export let pickPosition = new THREE.Vector2();
 
@@ -10,38 +11,111 @@ const raycaster = new THREE.Raycaster();
 let pickedObject: any | null = null;
 let pickedObjectSavedColor = 0;
 
+const selectedPartProperties = {
+  visibility: () => {},
+  wireframe: () => {},
+};
+
+selectedPartProperties.visibility = () => {
+  if (pickedObject !== null) {
+    pickedObject.material.transparent = true;
+    pickedObject.material.opacity = 0.5;
+    console.log(pickedObject);
+  }
+};
+
+selectedPartProperties.wireframe = () => {
+  if (pickedObject !== null) {
+    pickedObject.material.wireframe = !pickedObject.material.wireframe;
+  }
+};
+
+//selectedPartFolder
+//  .add(selectedPartProperties, "visibility")
+//  .name("Toggle Visibility");
+selectedPartFolder
+  .add(selectedPartProperties, "wireframe")
+  .name("Toggle Wireframe");
+
+function filterIntersects(intersects: any) {
+  const uniqueUUIDs = new Set();
+  const filteredIntersects = [];
+
+  for (let i = 0; i < intersects.length; i++) {
+    const objectUUID = intersects[i].object.uuid;
+
+    if (!uniqueUUIDs.has(objectUUID)) {
+      uniqueUUIDs.add(objectUUID);
+      filteredIntersects.push(intersects[i]);
+    }
+  }
+
+  return filteredIntersects;
+}
+
 export function pick(
-  pickPositionProp: any,
+  pickPositionProp: typeof pickPosition,
   sceneProp: any,
   cameraProp: any,
   timeProp: any,
+  reverse: boolean,
 ) {
+  if (pickPositionProp.x > 0.52 && pickPositionProp.y > 0.16) return;
+
   if (pickedObject !== null) {
-    pickedObject.material.emissive.setHex(pickedObjectSavedColor);
+    try {
+      pickedObject.material.emissive.setHex(pickedObjectSavedColor);
+    } catch {
+      console.error("Missing setHex", pickedObject);
+    }
     pickedObject = null;
   }
 
   raycaster.setFromCamera(pickPositionProp, cameraProp);
 
-  var intersects = raycaster.intersectObjects(sceneProp.children, true);
+  let intersects = raycaster.intersectObjects(sceneProp.children, true);
+  intersects = filterIntersects(intersects);
 
   if (intersects.length > 0) {
-    //console.log("Intersection:", intersects[0]);
+    if (!reverse) {
+      for (let i = 0; i < intersects.length; i++) {
+        //@ts-expect-error fix missing object type
+        if (intersects[i].object.material.wireframe === false) {
+          pickedObject = intersects[i].object;
+          break;
+        }
+      }
+      if (pickedObject === null)
+        pickedObject = intersects[intersects.length - 1].object;
+    } else {
+      for (let i = intersects.length - 1; i >= 0; i--) {
+        //@ts-expect-error fix missing object type
+        if (intersects[i].object.material.wireframe === true) {
+          pickedObject = intersects[i].object;
+          break;
+        }
+      }
+      if (pickedObject === null)
+        pickedObject = intersects[intersects.length - 1].object;
+    }
 
-    pickedObject = intersects[0].object;
-
-    //console.log(typeof pickedObject);
+    if (pickedObject === null) return;
+    if (
+      pickedObject.parent?.name === "floor" ||
+      pickedObject.type === "LineSegments"
+    ) {
+      pickedObject = null;
+      return;
+    }
 
     pickedObjectSavedColor = pickedObject.material.emissive.getHex();
-    pickedObject.material.emissive.setHex(
-      (timeProp * 8) % 2 > 1 ? 0xffff00 : 0xff0000,
-    );
+    pickedObject.material.emissive.setHex(0xff0000);
   }
 }
 
 function setPickPosition(event: any) {
-  pickPosition.x = (event.clientX / window.innerWidth) * 2 - 1;
-  pickPosition.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  pickPosition.x = 2 * (event.clientX / window.innerWidth) - 1;
+  pickPosition.y = -2 * (event.clientY / window.innerHeight) + 1;
 }
 
 export function clearPickPosition() {
@@ -50,12 +124,33 @@ export function clearPickPosition() {
 }
 
 const createPickerListener = () => {
-  const elapsedTime = timer.getElapsed();
-  window.addEventListener(
-    "click",
-    () => pick(pickPosition, scene, camera, elapsedTime),
-    false,
-  );
+  let mouseDown = false;
+  let mouseMoved = false;
+
+  window.addEventListener("mousedown", (event) => {
+    if (event.button === 0 || event.button === 2) {
+      mouseDown = true;
+      mouseMoved = false; // Reset the flag on a new mousedown
+    }
+  });
+
+  window.addEventListener("mousemove", () => {
+    if (mouseDown) {
+      mouseMoved = true;
+    }
+  });
+
+  window.addEventListener("mouseup", (event) => {
+    if (event.button === 0 && mouseDown && !mouseMoved) {
+      const elapsedTime = timer.getElapsed();
+      pick(pickPosition, scene, camera, elapsedTime, false);
+    } else if (event.button === 2 && mouseDown && !mouseMoved) {
+      const elapsedTime = timer.getElapsed();
+      pick(pickPosition, scene, camera, elapsedTime, true);
+    }
+    mouseDown = false; // Reset
+    mouseMoved = false; // Reset
+  });
 
   window.addEventListener("mousemove", setPickPosition);
   window.addEventListener("mouseout", clearPickPosition);

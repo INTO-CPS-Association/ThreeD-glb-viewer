@@ -12,6 +12,7 @@
     "require": "./dist/main.cjs"
   },
   "scripts": {
+    "test": "bun run ./test/static-server.ts & sleep 1 && bun test",
     "build": "bun run build.ts",
     "prepublishOnly": "bun run build"
   },

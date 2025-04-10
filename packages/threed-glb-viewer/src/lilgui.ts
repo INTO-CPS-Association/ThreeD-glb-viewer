@@ -5,6 +5,7 @@ const gui = new GUI({
 });
 
 const modelFolder = gui.addFolder("Model");
+const selectedPartFolder = gui.addFolder("Selected Part");
 const lightsFolder = gui.addFolder("Lights");
 lightsFolder.close();
 
@@ -14,6 +15,7 @@ const hemisphereLightFolder = lightsFolder.addFolder("Hemisphere Light");
 
 export {
   modelFolder,
+  selectedPartFolder,
   lightsFolder,
   directionalLightFolder,
   hemisphereLightFolder,

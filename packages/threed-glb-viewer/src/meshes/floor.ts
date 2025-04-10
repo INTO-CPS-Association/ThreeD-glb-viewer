@@ -19,5 +19,6 @@ floor.add(new THREE.LineSegments(geometry, lineMaterial));
 floor.add(new THREE.Mesh(geometry, meshMaterial));
 floor.rotation.x = Math.PI / -2;
 floor.position.y = -2;
+floor.name = "floor";
 
 export default floor;
