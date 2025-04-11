@@ -4,7 +4,12 @@
 
 This project is a monorepo with the package threed-glb-viewer and a test environment in pkg-example.
 
-## How to use this package?
+This package enables interaction with a statically served GLTF file, allowing users to toggle wireframe mode for individual parts and retrieve part annotations (name and, eventually, live data). It also provides options for configuring lighting and rotating the model in any direction.
+Parts can be selected externally using a left click or internally using a right click.
+
+![demo](https://github.com/INTO-CPS-Association/ThreeD-glb-viewer/blob/main/demo.gif)
+
+## How to use this package
 
 ```bash
 npm install @into-cps-association/threed-glb-viewer
