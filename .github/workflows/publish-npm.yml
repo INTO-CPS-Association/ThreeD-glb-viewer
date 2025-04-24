@@ -3,6 +3,8 @@ name: Publish package to Github NPM
 on:
   release:
     types: [published]
+  push:
+  pull_request:
   workflow_dispatch:
 
 env:
