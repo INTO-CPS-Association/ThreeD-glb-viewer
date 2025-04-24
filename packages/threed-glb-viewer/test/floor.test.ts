@@ -1,15 +1,18 @@
 /// <reference lib="dom" />
 
 import { describe, it, expect } from "bun:test";
-import scene from "../src/scene";
 import floor from "../src/meshes/floor";
+import Scene from "../src/scene";
 
 describe("Test floor", () => {
   it("Load floor", async (done) => {
-    let childrenBefore = scene.children.length;
-    scene.add(floor);
+    const canvas = document.getElementById("test") as HTMLCanvasElement;
+    const sceneInfo = Scene(canvas);
+
+    const childrenBefore = sceneInfo.scene.children.length;
+    sceneInfo.scene.add(floor);
     setTimeout(() => {
-      expect(scene.children.length).toBe(childrenBefore + 1);
+      expect(sceneInfo.scene.children.length).toBe(childrenBefore + 1);
       done();
     }, 400);
   });
