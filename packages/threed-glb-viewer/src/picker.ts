@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { selectedPartFolder } from "./lilgui";
-import { Timer } from "three/examples/jsm/Addons";
+import { renderCanvas } from "./main";
 
-const pickHandler = (canvas: HTMLCanvasElement) => {
+const pickHandler = () => {
   let pickPosition = new THREE.Vector2();
 
   const raycaster = new THREE.Raycaster();
@@ -29,9 +29,6 @@ const pickHandler = (canvas: HTMLCanvasElement) => {
     }
   };
 
-  //selectedPartFolder
-  //  .add(selectedPartProperties, "visibility")
-  //  .name("Toggle Visibility");
   selectedPartFolder
     .add(selectedPartProperties, "wireframe")
     .name("Toggle Wireframe");
@@ -52,14 +49,9 @@ const pickHandler = (canvas: HTMLCanvasElement) => {
     return filteredIntersects;
   }
 
-  function pick(
-    pickPositionProp: typeof pickPosition,
-    sceneProp: any,
-    cameraProp: any,
-    timeProp: any,
-    reverse: boolean,
-  ) {
-    if (pickPositionProp.x > 0.52 && pickPositionProp.y > 0.16) return;
+  function pick(id: string, timeProp: number, reverse: boolean) {
+    if (!renderCanvas[id]) return;
+    if (pickPosition.x > 0.52 && pickPosition.y > 0.16) return;
 
     if (pickedObject !== null) {
       try {
@@ -70,7 +62,10 @@ const pickHandler = (canvas: HTMLCanvasElement) => {
       pickedObject = null;
     }
 
-    raycaster.setFromCamera(pickPositionProp, cameraProp);
+    const cameraProp = renderCanvas[id].sceneInfo.camera;
+    const sceneProp = renderCanvas[id].sceneInfo.scene;
+
+    raycaster.setFromCamera(pickPosition, cameraProp);
 
     let intersects = raycaster.intersectObjects(sceneProp.children, true);
     intersects = filterIntersects(intersects);
@@ -124,19 +119,14 @@ const pickHandler = (canvas: HTMLCanvasElement) => {
     pickPosition.y = -Infinity;
   }
 
-  const createPickerListener = (
-    camera: THREE.PerspectiveCamera,
-    scene: THREE.Scene,
-    canvas: HTMLCanvasElement,
-    timer: Timer,
-  ) => {
+  const createPickerListener = () => {
     let mouseDown = false;
     let mouseMoved = false;
 
     window.addEventListener("mousedown", (event) => {
       if (event.button === 0 || event.button === 2) {
         mouseDown = true;
-        mouseMoved = false; // Reset the flag on a new mousedown
+        mouseMoved = false;
       }
     });
 
@@ -147,19 +137,26 @@ const pickHandler = (canvas: HTMLCanvasElement) => {
     });
 
     window.addEventListener("mouseup", (event) => {
+      //@ts-ignore
+      const id = event.target.id;
+      const timer = renderCanvas[id]?.timer;
+      if (!timer) return;
+      const elapsedTime = timer.getElapsed();
+
       if (event.button === 0 && mouseDown && !mouseMoved) {
-        const elapsedTime = timer.getElapsed();
-        pick(pickPosition, scene, camera, elapsedTime, false);
+        pick(id, elapsedTime, false);
       } else if (event.button === 2 && mouseDown && !mouseMoved) {
-        const elapsedTime = timer.getElapsed();
-        pick(pickPosition, scene, camera, elapsedTime, true);
+        pick(id, elapsedTime, true);
       }
-      mouseDown = false; // Reset
-      mouseMoved = false; // Reset
+      mouseDown = false;
+      mouseMoved = false;
     });
 
-    window.addEventListener("mousemove", (e) => {
-      setPickPosition(e, canvas);
+    window.addEventListener("mousemove", (event) => {
+      //@ts-ignore
+      const id = event.target.id;
+      const canvas = renderCanvas[id]?.canvas;
+      if (canvas) setPickPosition(event, canvas);
     });
     window.addEventListener("mouseout", clearPickPosition);
     window.addEventListener("mouseleave", clearPickPosition);
