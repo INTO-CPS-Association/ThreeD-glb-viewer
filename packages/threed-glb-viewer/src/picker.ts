@@ -50,7 +50,8 @@ const pickHandler = () => {
   }
 
   function pick(id: string, timeProp: number, reverse: boolean) {
-    if (!renderCanvas[id]) return;
+    const renderCanvasRef = renderCanvas.get(id);
+    if (!renderCanvasRef) return;
     if (pickPosition.x > 0.52 && pickPosition.y > 0.16) return;
 
     if (pickedObject !== null) {
@@ -62,8 +63,8 @@ const pickHandler = () => {
       pickedObject = null;
     }
 
-    const cameraProp = renderCanvas[id].sceneInfo.camera;
-    const sceneProp = renderCanvas[id].sceneInfo.scene;
+    const cameraProp = renderCanvasRef.sceneInfo.camera;
+    const sceneProp = renderCanvasRef.sceneInfo.scene;
 
     raycaster.setFromCamera(pickPosition, cameraProp);
 
@@ -139,7 +140,7 @@ const pickHandler = () => {
     window.addEventListener("mouseup", (event) => {
       //@ts-ignore
       const id = event.target.id;
-      const timer = renderCanvas[id]?.timer;
+      const timer = renderCanvas.get(id)?.timer;
       if (!timer) return;
       const elapsedTime = timer.getElapsed();
 
@@ -155,7 +156,7 @@ const pickHandler = () => {
     window.addEventListener("mousemove", (event) => {
       //@ts-ignore
       const id = event.target.id;
-      const canvas = renderCanvas[id]?.canvas;
+      const canvas = renderCanvas.get(id)?.canvas;
       if (canvas) setPickPosition(event, canvas);
     });
     window.addEventListener("mouseout", clearPickPosition);

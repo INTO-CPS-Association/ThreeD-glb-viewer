@@ -34,8 +34,8 @@ export const CanvasStyles: {
 const createDoubleClickListener = () => {
   window.addEventListener("dblclick", (e) => {
     //@ts-ignore
-    const id = e.target?.id;
-    const canvas = renderCanvas[id]?.canvas;
+    const id = e.target?.parentElement.id;
+    const canvas = renderCanvas.get(id)?.parent;
     if (!canvas) return;
 
     if (CanvasStyles[id]?.fullscreen) {

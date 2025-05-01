@@ -14,7 +14,9 @@ export async function loadModel(
     const gltf = await new GLTFLoader().loadAsync(src);
     model = gltf.scene;
     model.scale.set(0.01, 0.01, 0.01);
+    model.position.setX(0);
     model.position.setY(0);
+    model.position.setZ(0);
     return model;
   } catch (error) {
     console.log(error);
@@ -32,7 +34,7 @@ modelProperties.flipLeft = () => {
   Object.keys(CanvasStyles).forEach((key) => {
     const style = CanvasStyles[key];
     if (style.fullscreen) {
-      model = renderCanvas[key].model;
+      model = renderCanvas.get(key)?.model;
       if (model)
         gsap.to(model.rotation, { y: model.rotation.y + -Math.PI / 2 });
     }
@@ -42,7 +44,7 @@ modelProperties.flipRight = () => {
   Object.keys(CanvasStyles).forEach((key) => {
     const style = CanvasStyles[key];
     if (style.fullscreen) {
-      model = renderCanvas[key].model;
+      model = renderCanvas.get(key)?.model;
       if (model) gsap.to(model.rotation, { y: model.rotation.y + Math.PI / 2 });
     }
   });
@@ -51,7 +53,7 @@ modelProperties.flipUp = () => {
   Object.keys(CanvasStyles).forEach((key) => {
     const style = CanvasStyles[key];
     if (style.fullscreen) {
-      model = renderCanvas[key].model;
+      model = renderCanvas.get(key)?.model;
       if (model) gsap.to(model.rotation, { x: model.rotation.x + Math.PI / 2 });
     }
   });
@@ -60,7 +62,7 @@ modelProperties.flipDown = () => {
   Object.keys(CanvasStyles).forEach((key) => {
     const style = CanvasStyles[key];
     if (style.fullscreen) {
-      model = renderCanvas[key].model;
+      model = renderCanvas.get(key)?.model;
       if (model)
         gsap.to(model.rotation, { x: model.rotation.x + -Math.PI / 2 });
     }

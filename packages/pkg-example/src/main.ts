@@ -1,22 +1,30 @@
 import renderThreejs from "@into-cps-association/threed-glb-viewer";
 
-//async function main(modelSrc: string) {
-//  renderThreejs(modelSrc);
-//  renderThreejs(modelSrc, "test");
-//}
+const custom = renderThreejs.CustomCanvas();
+const body = document.getElementsByTagName("body")[0];
+body.appendChild(custom);
 
-//main("../static/models/2CylinderEngine/glTF/2CylinderEngine.gltf");
+renderThreejs.renderThreejs(
+  "../static/models/2CylinderEngine/glTF/2CylinderEngine.gltf",
+);
 
-renderThreejs("../static/models/2CylinderEngine/glTF/2CylinderEngine.gltf");
-renderThreejs(
-  "../static/models/2CylinderEngine/glTF/2CylinderEngine.gltf",
-  "test",
-);
-renderThreejs(
-  "../static/models/2CylinderEngine/glTF/2CylinderEngine.gltf",
-  "test1",
-);
-renderThreejs(
-  "../static/models/2CylinderEngine/glTF/2CylinderEngine.gltf",
-  "test2",
-);
+setInterval(() => {
+  const random1 = Math.random() * 100;
+  const random2 = Math.random() * 100;
+  renderThreejs.updateAnnotations({
+    motor1: {
+      x: 1,
+      y: 1,
+      z: 1,
+      name: "Motor 1 speed",
+      value: random1.toString(),
+    },
+    motor2: {
+      x: -1,
+      y: 1,
+      z: 1,
+      name: "Motor 2 speed",
+      value: random2.toString(),
+    },
+  });
+}, 2000);
