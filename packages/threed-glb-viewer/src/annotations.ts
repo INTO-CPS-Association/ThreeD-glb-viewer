@@ -29,9 +29,10 @@ export function createAnnotation(
   id: string,
   key: string,
   annotation: Annotation,
+  addToScene?: boolean,
 ) {
-  const sceneInfo = renderCanvas.get(id)?.sceneInfo;
-  if (!sceneInfo) return;
+  const renderCanvasInfo = renderCanvas.get(id);
+  if (!renderCanvasInfo?.model) return;
 
   let innerMap = annotationData.get(id);
 
@@ -78,7 +79,9 @@ export function createAnnotation(
     const wrapperObject = new CSS2DObject(elem);
     wrapperObject.position.set(x, y, z);
 
-    sceneInfo.scene.add(wrapperObject);
+    addToScene
+      ? renderCanvasInfo.sceneInfo.scene.add(wrapperObject)
+      : renderCanvasInfo.model.add(wrapperObject);
 
     if (innerMap) {
       innerMap.set(key, { ...annotation, elem: wrapperObject });

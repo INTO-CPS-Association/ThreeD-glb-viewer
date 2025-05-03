@@ -108,13 +108,18 @@ const pickHandler = () => {
 
       pickedObjectSavedColor = pickedObject.material.emissive.getHex();
       pickedObject.material.emissive.setHex(0xff0000);
-      createAnnotation(id, "picker-annotation", {
-        x: pickedPosition.x,
-        y: pickedPosition.y,
-        z: pickedPosition.z,
-        name: pickedObject.name,
-        value: "",
-      });
+      createAnnotation(
+        id,
+        "picker-annotation",
+        {
+          x: pickedPosition.x,
+          y: pickedPosition.y,
+          z: pickedPosition.z,
+          name: pickedObject.name,
+          value: "",
+        },
+        true,
+      );
     }
   }
 

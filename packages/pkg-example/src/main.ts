@@ -15,16 +15,16 @@ setInterval(() => {
   const random2 = Math.random() * 100;
   updateAnnotations({
     motor1: {
-      x: 1,
-      y: 1,
-      z: 1,
+      x: -100,
+      y: 100,
+      z: 0,
       name: "Motor 1 speed",
       value: random1.toString(),
     },
     motor2: {
-      x: -1,
-      y: 1,
-      z: 1,
+      x: 100,
+      y: 100,
+      z: 0,
       name: "Motor 2 speed",
       value: random2.toString(),
     },
