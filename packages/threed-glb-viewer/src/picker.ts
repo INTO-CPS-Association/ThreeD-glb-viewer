@@ -1,14 +1,14 @@
 import * as THREE from "three";
 import { selectedPartFolder } from "./lilgui";
 import { renderCanvas } from "./main";
+import { createAnnotation } from "./annotations";
 
 const pickHandler = () => {
   let pickPosition = new THREE.Vector2();
-
   const raycaster = new THREE.Raycaster();
-
   let pickedObject: any | null = null;
   let pickedObjectSavedColor = 0;
+  let pickedPosition: any | undefined;
 
   const selectedPartProperties = {
     visibility: () => {},
@@ -19,7 +19,6 @@ const pickHandler = () => {
     if (pickedObject !== null) {
       pickedObject.material.transparent = true;
       pickedObject.material.opacity = 0.5;
-      console.log(pickedObject);
     }
   };
 
@@ -49,7 +48,7 @@ const pickHandler = () => {
     return filteredIntersects;
   }
 
-  function pick(id: string, timeProp: number, reverse: boolean) {
+  function pick(id: string, reverse: boolean) {
     const renderCanvasRef = renderCanvas.get(id);
     if (!renderCanvasRef) return;
     if (pickPosition.x > 0.52 && pickPosition.y > 0.16) return;
@@ -77,6 +76,7 @@ const pickHandler = () => {
           //@ts-expect-error fix missing object type
           if (intersects[i].object.material.wireframe === false) {
             pickedObject = intersects[i].object;
+            pickedPosition = intersects[i].point;
             break;
           }
         }
@@ -87,11 +87,14 @@ const pickHandler = () => {
           //@ts-expect-error fix missing object type
           if (intersects[i].object.material.wireframe === true) {
             pickedObject = intersects[i].object;
+            pickedPosition = intersects[i].point;
             break;
           }
         }
-        if (pickedObject === null)
+        if (pickedObject === null) {
           pickedObject = intersects[intersects.length - 1].object;
+          pickedPosition = intersects[intersects.length - 1].point;
+        }
       }
 
       if (pickedObject === null) return;
@@ -105,6 +108,13 @@ const pickHandler = () => {
 
       pickedObjectSavedColor = pickedObject.material.emissive.getHex();
       pickedObject.material.emissive.setHex(0xff0000);
+      createAnnotation(id, "picker-annotation", {
+        x: pickedPosition.x,
+        y: pickedPosition.y,
+        z: pickedPosition.z,
+        name: pickedObject.name,
+        value: "",
+      });
     }
   }
 
@@ -131,23 +141,14 @@ const pickHandler = () => {
       }
     });
 
-    window.addEventListener("mousemove", () => {
-      if (mouseDown) {
-        mouseMoved = true;
-      }
-    });
-
     window.addEventListener("mouseup", (event) => {
       //@ts-ignore
-      const id = event.target.id;
-      const timer = renderCanvas.get(id)?.timer;
-      if (!timer) return;
-      const elapsedTime = timer.getElapsed();
+      const id = event.target.parentElement?.id;
 
-      if (event.button === 0 && mouseDown && !mouseMoved) {
-        pick(id, elapsedTime, false);
+      if (event.button === 0 && mouseDown && !mouseMoved && id) {
+        pick(id, false);
       } else if (event.button === 2 && mouseDown && !mouseMoved) {
-        pick(id, elapsedTime, true);
+        pick(id, true);
       }
       mouseDown = false;
       mouseMoved = false;
@@ -155,10 +156,15 @@ const pickHandler = () => {
 
     window.addEventListener("mousemove", (event) => {
       //@ts-ignore
-      const id = event.target.id;
+      const id = event.target.parentElement?.id;
       const canvas = renderCanvas.get(id)?.canvas;
       if (canvas) setPickPosition(event, canvas);
+
+      if (mouseDown) {
+        mouseMoved = true;
+      }
     });
+
     window.addEventListener("mouseout", clearPickPosition);
     window.addEventListener("mouseleave", clearPickPosition);
   };

@@ -38,20 +38,26 @@ export function createAnnotation(
   if (innerMap && innerMap.get(key)) {
     const oldAnnotation = innerMap.get(key)!;
 
-    const elem = document
-      .getElementById(id + "-" + key)
-      ?.getElementsByClassName("value")[0] as HTMLDivElement | undefined;
+    const elem = document.getElementById(id + "-" + key);
 
     if (elem) {
-      elem.innerText = annotation.value;
+      const name = elem.getElementsByClassName("name")[0] as
+        | HTMLDivElement
+        | undefined;
+      const value = elem.getElementsByClassName("value")[0] as
+        | HTMLDivElement
+        | undefined;
+      if (name) name.innerText = annotation.name;
+      if (value) value.innerText = annotation.value;
     }
+
+    oldAnnotation.elem?.position.set(annotation.x, annotation.y, annotation.z);
 
     innerMap.set(key, { ...oldAnnotation, ...annotation });
   } else {
     const { name, x, y, z, value } = annotation;
 
     const elem = document.createElement("wrapper");
-    elem.textContent = name;
     elem.style.width = "max-content";
     elem.style.backgroundColor = "white";
     elem.style.border = "1px black solid";
@@ -59,10 +65,15 @@ export function createAnnotation(
     elem.style.borderRadius = "5px";
     elem.id = id + "-" + key;
 
-    const val = document.createElement("div");
-    val.textContent = value;
-    val.className = "value";
-    elem.appendChild(val);
+    const nameElem = document.createElement("div");
+    nameElem.textContent = name;
+    nameElem.className = "name";
+    elem.appendChild(nameElem);
+
+    const valElem = document.createElement("div");
+    valElem.textContent = value;
+    valElem.className = "value";
+    elem.appendChild(valElem);
 
     const wrapperObject = new CSS2DObject(elem);
     wrapperObject.position.set(x, y, z);
@@ -98,7 +109,12 @@ export function updateAnnotationPositions(id: string) {
           .sub(raycast.ray.origin)
           .normalize();
         raycast.ray.direction.set(rd.x, rd.y, rd.z);
-        const hits = raycast.intersectObjects([renderCanvasRef.model]);
+        let hits = raycast.intersectObjects([renderCanvasRef.model]);
+        hits = hits.filter(
+          (hit) =>
+            //@ts-ignore
+            hit.object.material.wireframe === false,
+        );
         if (hits.length > 0) {
           elem.visible = false;
         } else {
