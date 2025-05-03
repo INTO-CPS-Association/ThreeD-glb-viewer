@@ -1,10 +1,18 @@
 /// <reference lib="dom" />
 
-import { describe, it, expect } from "bun:test";
+import { describe, it, expect, beforeEach } from "bun:test";
 import { loadModel, modelProperties } from "../src/meshes/model";
 import Scene from "../src/scene";
+import { CustomCanvas } from "../src/main";
 
 describe("Test model", () => {
+  let canvas: HTMLCanvasElement;
+  beforeEach(function () {
+    const parent = CustomCanvas("test");
+    document.body.appendChild(parent);
+    canvas = parent.getElementsByClassName("canvas")[0] as HTMLCanvasElement;
+  });
+
   it("Loads a remote model mesh", async (done) => {
     const model = await loadModel(
       "http://localhost:8090/2CylinderEngine/glTF/2CylinderEngine.gltf",
@@ -17,7 +25,7 @@ describe("Test model", () => {
   });
   it("Check that model loads into scene", async (done) => {
     const canvas = document.getElementById("test") as HTMLCanvasElement;
-    const sceneInfo = Scene(canvas);
+    const sceneInfo = Scene(canvas, "test");
 
     let childrenBefore = sceneInfo.scene.children.length;
 
@@ -33,7 +41,7 @@ describe("Test model", () => {
   });
   it("Rotate a model left", async (done) => {
     const canvas = document.getElementById("test") as HTMLCanvasElement;
-    const sceneInfo = Scene(canvas);
+    const sceneInfo = Scene(canvas, "test");
 
     const model = await loadModel(
       "http://localhost:8090/2CylinderEngine/glTF/2CylinderEngine.gltf",
@@ -51,7 +59,7 @@ describe("Test model", () => {
   });
   it("Rotate a model right", async (done) => {
     const canvas = document.getElementById("test") as HTMLCanvasElement;
-    const sceneInfo = Scene(canvas);
+    const sceneInfo = Scene(canvas, "test");
 
     const model = await loadModel(
       "http://localhost:8090/2CylinderEngine/glTF/2CylinderEngine.gltf",
@@ -69,7 +77,7 @@ describe("Test model", () => {
   });
   it("Rotate a model down", async (done) => {
     const canvas = document.getElementById("test") as HTMLCanvasElement;
-    const sceneInfo = Scene(canvas);
+    const sceneInfo = Scene(canvas, "test");
 
     const model = await loadModel(
       "http://localhost:8090/2CylinderEngine/glTF/2CylinderEngine.gltf",
@@ -87,7 +95,7 @@ describe("Test model", () => {
   });
   it("Rotate a model up", async (done) => {
     const canvas = document.getElementById("test") as HTMLCanvasElement;
-    const sceneInfo = Scene(canvas);
+    const sceneInfo = Scene(canvas, "test");
 
     const model = await loadModel(
       "http://localhost:8090/2CylinderEngine/glTF/2CylinderEngine.gltf",

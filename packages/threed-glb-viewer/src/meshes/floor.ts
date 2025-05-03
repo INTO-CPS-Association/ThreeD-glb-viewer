@@ -11,7 +11,6 @@ const lineMaterial = new THREE.LineBasicMaterial({
 const meshMaterial = new THREE.MeshPhongMaterial({
   color: 0x156289,
   emissive: 0x072534,
-  side: undefined,
   flatShading: true,
 });
 

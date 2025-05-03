@@ -1,8 +1,8 @@
 /// <reference lib="dom" />
+// https://github.com/capricorn86/happy-dom/issues/241
 
-import { describe, expect, it } from "bun:test";
-import { ok } from "assert";
-import renderThreejs from "../src/main";
+import { beforeEach, describe, expect, it } from "bun:test";
+import { CustomCanvas, renderThreejs } from "../src/main";
 
 function comparePixelData(
   data1: Uint8ClampedArray,
@@ -23,18 +23,18 @@ function comparePixelData(
 }
 
 describe("Threejs tests", () => {
-  it("Load scene", async (done) => {
-    // Create a canvas element
-    const canvas = document.createElement("canvas");
-    canvas.id = "test";
-    canvas.width = 300;
-    canvas.height = 300;
+  let canvas: HTMLCanvasElement;
+  beforeEach(function () {
+    const parent = CustomCanvas("test");
+    document.body.appendChild(parent);
+    canvas = parent.getElementsByClassName("canvas")[0] as HTMLCanvasElement;
+  });
 
-    document.body.appendChild(canvas);
-    await new Promise((r) => setTimeout(r, 200));
-
-    const canvas_ = document.getElementById("test") as HTMLCanvasElement;
-    expect(canvas_).toBeTypeOf("object");
+  it("Load scene", async () => {
+    const canvas_ = document
+      .getElementById("test")
+      ?.getElementsByClassName("canvas")[0] as HTMLCanvasElement;
+    expect(canvas_).toBeInstanceOf("object");
 
     const initialData = canvas_
       .getContext("2d")!
@@ -50,7 +50,5 @@ describe("Threejs tests", () => {
       .getImageData(0, 0, canvas_.width, canvas_.height).data;
 
     expect(comparePixelData(initialData, newData)).toBe(true);
-
-    done();
   });
 });

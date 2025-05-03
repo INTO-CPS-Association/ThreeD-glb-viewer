@@ -1,17 +1,19 @@
-import renderThreejs from "@into-cps-association/threed-glb-viewer";
+import {
+  renderThreejs,
+  CustomCanvas,
+  updateAnnotations,
+} from "@into-cps-association/threed-glb-viewer";
 
-const custom = renderThreejs.CustomCanvas();
+const custom = CustomCanvas();
 const body = document.getElementsByTagName("body")[0];
 body.appendChild(custom);
 
-renderThreejs.renderThreejs(
-  "../static/models/2CylinderEngine/glTF/2CylinderEngine.gltf",
-);
+renderThreejs("../static/models/2CylinderEngine/glTF/2CylinderEngine.gltf");
 
 setInterval(() => {
   const random1 = Math.random() * 100;
   const random2 = Math.random() * 100;
-  renderThreejs.updateAnnotations({
+  updateAnnotations({
     motor1: {
       x: 1,
       y: 1,

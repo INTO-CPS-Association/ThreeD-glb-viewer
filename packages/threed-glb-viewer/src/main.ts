@@ -54,7 +54,28 @@ export const renderCanvas = new Map<
   }
 >();
 
-async function renderThreejs(
+export const CustomCanvas = (
+  id: string = "threed-glb-viewer-canvas",
+  height: string = "500px",
+  width: string = "500px",
+) => {
+  const parent = document.createElement("div");
+
+  parent.id = id;
+  parent.style.position = "relative";
+  parent.style.height = height;
+  parent.style.width = width;
+  parent.style.overflow = "hidden";
+
+  const canvas = document.createElement("canvas");
+  canvas.style.width = "100%";
+  canvas.style.height = "100%";
+
+  parent.appendChild(canvas);
+  return parent;
+};
+
+export async function renderThreejs(
   modelSrc: string,
   id: string = "threed-glb-viewer-canvas",
   addFloor: boolean = false,
@@ -111,25 +132,4 @@ async function renderThreejs(
   tick();
 }
 
-const CustomCanvas = (
-  id: string = "threed-glb-viewer-canvas",
-  height: string = "500px",
-  width: string = "500px",
-) => {
-  const parent = document.createElement("div");
-
-  parent.id = id;
-  parent.style.position = "relative";
-  parent.style.height = height;
-  parent.style.width = width;
-  parent.style.overflow = "hidden";
-
-  const canvas = document.createElement("canvas");
-  canvas.style.width = "100%";
-  canvas.style.height = "100%";
-
-  parent.appendChild(canvas);
-  return parent;
-};
-
-export default { renderThreejs, updateAnnotations, CustomCanvas };
+export { updateAnnotations };
