@@ -73,7 +73,7 @@ const pickHandler = () => {
     if (intersects.length > 0) {
       if (!reverse) {
         for (let i = 0; i < intersects.length; i++) {
-          //@ts-expect-error fix missing object type
+          //@ts-expect-error missing object type
           if (intersects[i].object.material.wireframe === false) {
             pickedObject = intersects[i].object;
             pickedPosition = intersects[i].point;
@@ -84,7 +84,7 @@ const pickHandler = () => {
           pickedObject = intersects[intersects.length - 1].object;
       } else {
         for (let i = intersects.length - 1; i >= 0; i--) {
-          //@ts-expect-error fix missing object type
+          //@ts-expect-error missing object type
           if (intersects[i].object.material.wireframe === true) {
             pickedObject = intersects[i].object;
             pickedPosition = intersects[i].point;
