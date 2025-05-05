@@ -37,7 +37,7 @@ function createEventFunctions() {
 export const renderCanvas = new Map<
   string,
   {
-    id: string;
+    canvasId: string;
     canvas: HTMLCanvasElement;
     parent: HTMLDivElement;
     sceneInfo: {
@@ -55,13 +55,13 @@ export const renderCanvas = new Map<
 >();
 
 export const CustomCanvas = (
-  id: string = "threed-glb-viewer-canvas",
+  canvasId: string = "threed-glb-viewer-canvas",
   height: string = "500px",
   width: string = "500px",
 ) => {
   const parent = document.createElement("div");
 
-  parent.id = id;
+  parent.id = canvasId;
   parent.style.position = "relative";
   parent.style.height = height;
   parent.style.width = width;
@@ -77,15 +77,15 @@ export const CustomCanvas = (
 
 export async function renderThreejs(
   modelSrc: string,
-  id: string = "threed-glb-viewer-canvas",
+  canvasId: string = "threed-glb-viewer-canvas",
   addFloor: boolean = false,
 ) {
-  const parent = document.getElementById(id) as HTMLDivElement;
+  const parent = document.getElementById(canvasId) as HTMLDivElement;
   if (!parent) return;
   const canvas = parent.children[0] as HTMLCanvasElement | undefined;
   if (!canvas) return;
 
-  const sceneInfo = CreateScene(canvas, id);
+  const sceneInfo = CreateScene(canvas, canvasId);
 
   const timer = new Timer();
   const renderer = new WebGLRenderer({ antialias: true, canvas });
@@ -95,7 +95,14 @@ export async function renderThreejs(
   if (model) sceneInfo.scene.add(model);
   if (addFloor) sceneInfo.scene.add(floor);
 
-  renderCanvas.set(id, { id, parent, canvas, sceneInfo, timer, model });
+  renderCanvas.set(canvasId, {
+    canvasId,
+    parent,
+    canvas,
+    sceneInfo,
+    timer,
+    model,
+  });
 
   // Annotations
   const labelRenderer = new CSS2DRenderer();
@@ -125,7 +132,7 @@ export async function renderThreejs(
     labelRenderer.render(sceneInfo.scene, sceneInfo.camera);
 
     sceneInfo.controls.update();
-    updateAnnotationPositions(id);
+    updateAnnotationPositions(canvasId);
     requestAnimationFrame(tick);
   };
 

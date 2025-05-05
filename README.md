@@ -4,7 +4,8 @@
 
 This project is a monorepo with the package threed-glb-viewer and a test environment in pkg-example.
 
-This package enables interaction with a statically served GLTF file, allowing users to toggle wireframe mode for individual parts and retrieve part annotations (name, live data). It also provides options for configuring lighting and rotating the model in any direction.
+This package enables interaction with a statically served GLTF file, allowing users to toggle wireframe mode for individual parts and retrieve part annotations (name, live data).
+The canvas is focused using double left-click and the mouse is used to orbit around the model.
 Parts can be selected externally using a left click or internally using a right click.
 
 ![demo](https://github.com/INTO-CPS-Association/ThreeD-glb-viewer/blob/main/demo.gif)
@@ -46,6 +47,27 @@ setInterval(() => {
 }, 1000);
 ```
 
+### Styling of annotations
+
+The annotations is styled using the class names annotation, annotation-name and annotation-value
+
+```css
+/* Example styling */
+.annotation {
+  width: max-content;
+  background-color: white;
+  border: 1px black solid;
+  padding: 5px;
+  border-radius: 5px;
+}
+.annotation-name {
+  font-size: 1.2rem;
+}
+.annotation-value {
+  color: red;
+}
+```
+
 ## Development
 
 ### Build package
@@ -71,6 +93,10 @@ bun run dev
 ```
 
 [Test server](packages/pkg-example/README.md)
+
+## References
+
+[glTF Sample Models](https://github.com/KhronosGroup/glTF-Sample-Models/tree/main)
 
 ## License
 

@@ -27,6 +27,7 @@ export const CanvasStyles: {
     bottom: string;
     left: string;
     right: string;
+    zIndex: string;
     fullscreen: boolean;
   };
 } = {};
@@ -47,6 +48,7 @@ const createDoubleClickListener = () => {
       canvas.style.bottom = CanvasStyles[id].bottom;
       canvas.style.left = CanvasStyles[id].left;
       canvas.style.right = CanvasStyles[id].right;
+      canvas.style.zIndex = CanvasStyles[id].zIndex;
       CanvasStyles[id] = {
         ...CanvasStyles[id],
         fullscreen: false,
@@ -61,6 +63,7 @@ const createDoubleClickListener = () => {
         bottom: canvas.style.bottom,
         left: canvas.style.left,
         right: canvas.style.right,
+        zIndex: canvas.style.zIndex,
         fullscreen: true,
       };
       canvas.style.width = "100%";
@@ -69,6 +72,7 @@ const createDoubleClickListener = () => {
       canvas.style.bottom = "0";
       canvas.style.left = "0";
       canvas.style.right = "0";
+      canvas.style.zIndex = "1000";
       canvas.style.position = "absolute";
     }
   });

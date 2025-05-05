@@ -48,8 +48,8 @@ const pickHandler = () => {
     return filteredIntersects;
   }
 
-  function pick(id: string, reverse: boolean) {
-    const renderCanvasRef = renderCanvas.get(id);
+  function pick(canvasId: string, reverse: boolean) {
+    const renderCanvasRef = renderCanvas.get(canvasId);
     if (!renderCanvasRef) return;
     if (pickPosition.x > 0.52 && pickPosition.y > 0.16) return;
 
@@ -109,7 +109,7 @@ const pickHandler = () => {
       pickedObjectSavedColor = pickedObject.material.emissive.getHex();
       pickedObject.material.emissive.setHex(0xff0000);
       createAnnotation(
-        id,
+        canvasId,
         "picker-annotation",
         {
           x: pickedPosition.x,
