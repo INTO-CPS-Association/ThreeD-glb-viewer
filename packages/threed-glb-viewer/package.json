@@ -1,7 +1,7 @@
 {
   "name": "@into-cps-association/threed-glb-viewer",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "main": "./dist/main.cjs",
   "module": "./dist/main.js",
   "types": "./dist/main.d.ts",
@@ -27,16 +27,16 @@
   "bugs": "https://github.com/INTO-CPS-Association/ThreeD-glb-viewer/issues",
   "author": "Oliver Geneser <hello@geneser.xyz>",
   "devDependencies": {
-    "@happy-dom/global-registrator": "^17.4.4",
-    "@types/bun": "^1.2.8",
+    "@happy-dom/global-registrator": "^17.4.6",
+    "@types/bun": "^1.2.11",
     "@types/mime-types": "^2.1.4",
-    "@types/three": "^0.173.0",
+    "@types/three": "^0.176.0",
     "bun-plugin-dts": "^0.3.0",
-    "mime-types": "^2.1.35"
+    "mime-types": "^3.0.1"
   },
   "dependencies": {
-    "gsap": "^3.12.7",
+    "gsap": "^3.13.0",
     "lil-gui": "^0.20.0",
-    "three": "^0.173.0"
+    "three": "^0.176.0"
   }
 }

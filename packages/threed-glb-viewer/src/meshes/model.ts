@@ -2,9 +2,10 @@ import { modelFolder } from "../lilgui";
 import gsap from "gsap";
 import { Group, Object3DEventMap } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { CanvasStyles } from "../utils/fullscreen";
+import { renderCanvas } from "../main";
 
 let model: any | null = null;
-export default model;
 
 export async function loadModel(
   src: string,
@@ -13,7 +14,9 @@ export async function loadModel(
     const gltf = await new GLTFLoader().loadAsync(src);
     model = gltf.scene;
     model.scale.set(0.01, 0.01, 0.01);
+    model.position.setX(0);
     model.position.setY(0);
+    model.position.setZ(0);
     return model;
   } catch (error) {
     console.log(error);
@@ -28,16 +31,42 @@ export const modelProperties = {
 };
 
 modelProperties.flipLeft = () => {
-  gsap.to(model.rotation, { y: model.rotation.y + -Math.PI / 2 });
+  Object.keys(CanvasStyles).forEach((key) => {
+    const style = CanvasStyles[key];
+    if (style.fullscreen) {
+      model = renderCanvas.get(key)?.model;
+      if (model)
+        gsap.to(model.rotation, { y: model.rotation.y + -Math.PI / 2 });
+    }
+  });
 };
 modelProperties.flipRight = () => {
-  gsap.to(model.rotation, { y: model.rotation.y + Math.PI / 2 });
+  Object.keys(CanvasStyles).forEach((key) => {
+    const style = CanvasStyles[key];
+    if (style.fullscreen) {
+      model = renderCanvas.get(key)?.model;
+      if (model) gsap.to(model.rotation, { y: model.rotation.y + Math.PI / 2 });
+    }
+  });
 };
 modelProperties.flipUp = () => {
-  gsap.to(model.rotation, { x: model.rotation.x + Math.PI / 2 });
+  Object.keys(CanvasStyles).forEach((key) => {
+    const style = CanvasStyles[key];
+    if (style.fullscreen) {
+      model = renderCanvas.get(key)?.model;
+      if (model) gsap.to(model.rotation, { x: model.rotation.x + Math.PI / 2 });
+    }
+  });
 };
 modelProperties.flipDown = () => {
-  gsap.to(model.rotation, { x: model.rotation.x + -Math.PI / 2 });
+  Object.keys(CanvasStyles).forEach((key) => {
+    const style = CanvasStyles[key];
+    if (style.fullscreen) {
+      model = renderCanvas.get(key)?.model;
+      if (model)
+        gsap.to(model.rotation, { x: model.rotation.x + -Math.PI / 2 });
+    }
+  });
 };
 
 modelFolder.add(modelProperties, "flipLeft").name("left");

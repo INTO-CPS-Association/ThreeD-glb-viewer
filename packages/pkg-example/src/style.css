@@ -1,12 +1,13 @@
-#threed-glb-viewer-canvas {
-  height: 100vh;
-  width: 100vw;
+.annotation {
+  width: max-content;
+  background-color: white;
+  border: 1px black solid;
+  padding: 5px;
+  border-radius: 5px;
 }
-
-* {
-  outline: none;
+.annotation-name {
+  font-size: 1.2rem;
 }
-
-body {
-  overflow: hidden;
+.annotation-value {
+  color: red;
 }
